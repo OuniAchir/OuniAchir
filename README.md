@@ -1,7 +1,7 @@
 - 👋 Hi, I’m @OuniAchir
 - 👀 Interessée par domaine de l'informatique.
 - 🌱 Etudiante en Master 
-- 💞️ Ala recherche d'opportunieté pour monter en compétences   
+- 💞️ A la recherche d'opportunieté pour monter en compétences (Alternance / stage)
 - 📫 ounissaachir42@gmail.com
 
 <!---
