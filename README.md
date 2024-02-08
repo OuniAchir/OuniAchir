@@ -1,4 +1,5 @@
 Ce projet est une application de gestion d'authentification utilisateur tel que :
+
 **FICHIERS INCLUS** 
 connexion.php : Ce fichier contient le formulaire de connexion utilisateur en HTML avec des fonctionnalités de vérification côté serveur en PHP. Il se connecte à une base de données MySQL pour vérifier les informations d'identification.
 
