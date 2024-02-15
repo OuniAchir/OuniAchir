@@ -1,3 +1,8 @@
+<?php
+session_start();
+$token = $_SESSION['token'] ?? ''; 
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -67,10 +72,10 @@ require('recaptcha/autoload.php');
          var_dump('Captcha Valide');
     } else {
         $errors = $resp->getErrorCodes();
-        echo "<script>alert('Captcha Invalide');</script>";
+        echo htmlentities('Captcha Invalide');
     }
     } else {
-        echo "<script>alert('Captcha non rempli');</script>";
+        echo htmlentities('Captcha non rempli');
     }
  }
 ?>
@@ -101,6 +106,8 @@ require('recaptcha/autoload.php');
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <div class="g-recaptcha" data-sitekey="6LfXcWwpAAAAAAV0L_t6xfEGsEwL7Zo90Rv-mj9G"></div>
         <br/>
+
+        <input type="hidden" name="token" id="token" value="<?php echo $token;?>"/>
 
         <input type="submit" value="S'inscrire" name="ok">
         <input type="reset" value="Réinitialiser" name="reset">
