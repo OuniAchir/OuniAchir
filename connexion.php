@@ -98,59 +98,7 @@ $token = $_SESSION['token'];
 </head>
 <body>
 
-<?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "devoir_securite";
-
-try {
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Erreur de connexion : " . $e->getMessage());
-}
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST['token']) && hash_equals($_SESSION['token'], $_POST['token'])) {
-        if (isset($_POST["ok"])) {
-            $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-            $password = $_POST["password"];
-
-            if (!empty($email) && !empty($password)) {
-                $stmt = $conn->prepare("SELECT * FROM users WHERE email = :email");
-                $stmt->bindParam(':email', $email);
-                $stmt->execute();
-                $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-                if ($user && password_verify($password, $user['password'])) {
-                    // Utilisateur connecté
-                    echo htmlentities("Vous êtes connecté(e).");
-                    exit();
-                } else {
-                    // Identifiants incorrects
-                    echo htmlentities("Email ou mot de passe incorrect !");
-                    exit();
-                }
-            }
-        }
-
-        if (isset($_POST["inscrire"])) {
-            header("Location: inscription.php");
-            exit();
-        }
-
-        if (isset($_POST['reset'])) {
-            $nom = $prenom = $email = $password = '';
-            //echo 'Formulaire réinitialisé!';
-        }
-    } else {
-        die("Erreur de sécurité CSRF.");
-    }
-}
-?>
-
-<form method="POST" action="" onsubmit="return validateLoginForm()" style="background-image: url('logo8.PNG'); background-size: cover; background-position: center; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); width: 300px;">
+<form method="POST" action="traitement_connexion.php" onsubmit="return validateLoginForm()" style="background-image: url('logo8.PNG'); background-size: cover; background-position: center; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); width: 300px;">
     <label for="email">Email :</label>
     <input type="email" id="email" name="email" placeholder="Entrez votre email..." required>
 
