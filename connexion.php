@@ -1,3 +1,11 @@
+<?php
+session_start();
+if (empty($_SESSION['token'])) {
+    $_SESSION['token'] = bin2hex(random_bytes(32));
+}
+$token = $_SESSION['token'];
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -103,49 +111,53 @@ try {
     die("Erreur de connexion : " . $e->getMessage());
 }
 
-$message = ''; 
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST["ok"])) {
-        $email = $_POST["email"];
-        $password = $_POST["password"];
+    if (isset($_POST['token']) && hash_equals($_SESSION['token'], $_POST['token'])) {
+        if (isset($_POST["ok"])) {
+            $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+            $password = $_POST["password"];
 
-        if (!empty($email) && !empty($password)) {
-            // Rechercher l'utilisateur par e-mail
-            $stmt = $conn->prepare("SELECT * FROM users WHERE email = :email");
-            $stmt->bindParam(':email', $email);
-            $stmt->execute();
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (!empty($email) && !empty($password)) {
+                $stmt = $conn->prepare("SELECT * FROM users WHERE email = :email");
+                $stmt->bindParam(':email', $email);
+                $stmt->execute();
+                $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($user && password_verify($password, $user['password'])) {
-                $message = 'Vous êtes connecté(e)';
-                echo "<script>alert('Vous êtes connecté(e)');</script>";
-                //echo 'connecteé';
-            } else {
-                $message = "Email ou mot de passe incorrect !";
-                //echo 'incorrect';
-                echo "<script>alert('Email ou mot de passe incorrect !');</script>";
+                if ($user && password_verify($password, $user['password'])) {
+                    // Utilisateur connecté
+                    echo htmlentities("Vous êtes connecté(e).");
+                    exit();
+                } else {
+                    // Identifiants incorrects
+                    echo htmlentities("Email ou mot de passe incorrect !");
+                    exit();
+                }
             }
         }
-    }
 
-    if (isset($_POST["inscrire"])) {
-        header("Location: inscription.php");
-        exit();
-    }
+        if (isset($_POST["inscrire"])) {
+            header("Location: inscription.php");
+            exit();
+        }
 
-    if (isset($_POST['reset'])) {
-        $nom = $prenom = $email = $password = '';
-        //echo 'Formulaire réinitialisé!';
+        if (isset($_POST['reset'])) {
+            $nom = $prenom = $email = $password = '';
+            //echo 'Formulaire réinitialisé!';
+        }
+    } else {
+        die("Erreur de sécurité CSRF.");
     }
 }
 ?>
+
 <form method="POST" action="" onsubmit="return validateLoginForm()" style="background-image: url('logo8.PNG'); background-size: cover; background-position: center; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); width: 300px;">
     <label for="email">Email :</label>
     <input type="email" id="email" name="email" placeholder="Entrez votre email..." required>
 
     <label for="password">Mot de passe :</label>
     <input type="password" id="password" name="password" placeholder="Entrez votre mot de passe..." required>
+
+    <input type="hidden" name="token" id="token" value="<?php echo $token;?>"/>
 
     <input type="submit" value="Se connecter" name="ok">
     <input type="submit" value="Ajouter un compte" name="inscrire" onclick="removeValidation()">
