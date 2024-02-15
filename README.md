@@ -1,6 +1,7 @@
 Ce projet est une application de gestion d'authentification utilisateur tel que :
 
 **FICHIERS INCLUS** 
+
 connexion.php : Ce fichier contient le formulaire de connexion utilisateur en HTML avec des fonctionnalités de vérification côté serveur en PHP. Il se connecte à une base de données MySQL pour vérifier les informations d'identification.
 
 inscription.php : Ce fichier contient le formulaire d'inscription utilisateur en HTML avec des fonctionnalités de vérification côté serveur en PHP. Il intègre également une vérification de captcha pour prévenir les robots.
@@ -8,6 +9,10 @@ inscription.php : Ce fichier contient le formulaire d'inscription utilisateur en
 traitement.php : Ce fichier contient le traitement des données du formulaire d'inscription, y compris la vérification du captcha, la validation des données et l'insertion des données dans la base de données.
 
 background.PNG, logo8.PNG, logo10.PNG : Ces fichiers sont des ressources d'image utilisées comme arrière-plan et logos dans les formulaires HTML.
+
+traitement_connexion.php: ce fichier fait le traitement des données de connexion.
+
+base_de_donnée.sql: fichier Sql contenant la base de données qui est a éxécuté avant le code sur un onvité de commande ex: phpMyAdmin.
 
 **Instructions d'Utilisation**
 Configuration de la Base de Données : Assurez-vous de créer une base de données MySQL nommée 'devoir_securite' avec une table nommée 'users'. La table users  **doit** comporter au moins les colonnes suivantes :
@@ -38,5 +43,4 @@ Bouton "S'inscrire" : Sur la page inscription.php, le bouton "S'inscrire" permet
 
 Bouton "Réinitialiser" : Le bouton "Réinitialiser" sur les pages connexion.php et inscription.php réinitialise tous les champs du formulaire, permettant à l'utilisateur de recommencer le processus si nécessaire.
 
-
-
+Pour la sécurité du formulaire j'ai utilisé les tokens et j'ai remplacé le code Js en php, j'ai filtré les entrées du formulaire, j'ai utilisé le hashage du mot de passe et j'ai implementé le recaptcha. 
